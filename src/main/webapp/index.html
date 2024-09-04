@@ -1,0 +1,193 @@
+<html>
+<head>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" rel="stylesheet">
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg sticky-top border-bottom border-light bg-dark" >
+    <div class="container-fluid">
+        <a class="navbar-brand white fs-1 text-white" href="index.html"> Image Scraper</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse " id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fs-4 text-white">
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="WriteUp.html">Instructions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="About.html">About</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="jumbotron text-center py-5" style = "background-color: bisque;">
+    <div class="container">
+        <h1 class="jumbotron-heading">Eulerity Take-Home Challenge</h1>
+        <p class="lead text-muted">This is a multithread friendly image scraper. Please note it may
+            take some time and some images that we scrape are super SMALL and this scraper does not rescale images
+            so we can keep the aspect ratio. Enter a link to begin scraping :D Also Please read the About page, Thanks!</p>
+
+        <div class="input">
+            <form>
+                <input class = " form-control" name="url" type="text" placeholder="PleaseConsiderGivingMeAnInternship:D.com">
+            </form>
+            <button type="button"  class ="btn btn-primary" id = "submit">Scrape!</button>
+        </div>
+
+    </div>
+</section>
+<h1></h1>
+<div class="content" style="width: 800px; height: 600px;">
+    <div class="output">
+        <div id="moveLeft" >
+
+        </div>
+        <div id="moveRight">
+
+        </div>
+        <ul class="results">
+
+        </ul>
+    </div>
+</div>
+<style>
+    .output {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    .content{
+        position: absolute; /* Fixed position relative to the viewport */
+        margin-top : 350px;
+        top: 50%; /* Center vertically */
+        left: 50%; /* Center horizontally */
+        transform: translate(-50%, -50%); /* Offset the div by half its width and height */
+        /* Add your desired width, height, and styling */
+        width: 200px; /* Example width */
+        height: 100px; /* Example height */
+        background: #f8f8f8; /* Example background color */
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Example shadow */
+        z-index: 5; /* Ensure it's above other content but below the header */\
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+</style>
+<script>
+    var resultList = document.querySelector('ul.results');
+    var urlInput = document.querySelector('input[name=url]');
+    var left = document.getElementById('moveLeft');
+    var right = document.getElementById('moveRight');
+    var imageList;
+    var currentImage = 0;
+    var button = document.getElementById("submit");
+
+    apiCallBack = function (xhr, callback) {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            if (xhr.status != 200) {
+                let message = xhr.status + ":" + xhr.statusText + ":"
+                    + xhr.responseText;
+                alert(message);
+                throw 'API call returned bad code: ' + xhr.status;
+            }
+            let response = xhr.responseText ? JSON.parse(xhr.responseText)
+                : null;
+            if (callback) {
+                callback(response);
+            }
+        }
+    }
+
+    updateList = function (response) {
+        if(response.length == 1 && JSON.parse(imageList[0]).url == "INVALID URL")
+        {
+            resultList.innerHTML = "<p>Can't find images at " + JSON.parse(imageList[0]).sourceURL +"</p>";
+            right.innerHTML = "";
+            left.innerHTML = "";
+        } else if (response.length != 0) {
+            imageList = response;
+            console.log(imageList[0] + "Image 0");
+            showImage(0);
+        } else {
+            resultList.innerHTML = "<p>No images found</p>";
+            right.innerHTML = "";
+            left.innerHTML = "";
+        }
+    }
+    showImage = function (index) {
+        var obj = JSON.parse(imageList[index]);
+        var container = document.createElement("div");
+        var img = document.createElement("img");
+        var title = document.createElement("p");
+        var type = document.createElement("p");
+        if(obj.altText == ""){
+            obj.altText = "N/A";
+        }
+        title.innerHTML = "<H1 class = \"card-title\">Title : " + obj.altText + "</H1>";
+        type.innerHTML = "<H2 class = \"card-subtitle mb-2 text-muted\"> Type of Image : " + obj.logo + "<MATH";
+        if(obj.altText == null){
+            title.innerHTML = "Title: No Title Found";
+        }
+
+
+        img.src = obj.url;
+        if(img.width >= 600){
+            img.width = 600;
+        }
+
+        currentImage = index;
+        if (index == 0) {
+            left.innerHTML = ""
+        } else {
+            left.innerHTML = "<button type='button' class='btn btn-secondary' onclick='showImage(" + (index - 1) + ")'>Previous</button>";
+            left.style= "position: absolute;" +
+                "    top: 50%;" +
+                "    transform: translateY(-50%);" + "left: 0;"
+        }
+        if (index == imageList.length - 1) {
+            right.innerHTML = ""
+        } else {
+            right.innerHTML = "<button type='button' class='btn btn-secondary' onclick='showImage(" + (index +1) + ")'>Next</button>";
+            right.style= "    position: absolute;" +
+                "    top: 50%;" +
+                "    transform: translateY(-50%);" +
+                "    right: 0; "
+        }
+        img.style =   "  display: flex;" +
+            "  justify-content: center;" +
+            "  align-items: center;" +
+            "  max-width: 100%;" +
+            "  max-height: 100%;" ;
+        resultList.innerHTML = "";
+        container.appendChild(title);
+        container.appendChild(type);
+        container.appendChild(img);
+        resultList.appendChild(container);
+    }
+
+    makeApiCall = function (url, method, obj, callback) {
+        let xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+        xhr.onreadystatechange = apiCallBack.bind(null, xhr, callback);
+        xhr.send(obj ? obj instanceof FormData || obj.constructor == String ? obj : JSON.stringify(obj) : null);
+    }
+
+    button.addEventListener("click", function (event) {
+        console.log("RAN!")
+        event.preventDefault();
+        makeApiCall('/main?url=' + urlInput.value, 'POST', null, updateList);
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" rel="stylesheet">
+
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg sticky-top border-bottom border-light bg-dark" >
+    <div class="container-fluid">
+        <a class="navbar-brand white fs-1 text-white" href="index.html"> Image Scraper</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse " id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fs-4 text-white">
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="WriteUp.html">Instructions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="About.html">About</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="jumbotron text-center py-5" style = "background-color: bisque;">
+    <div class="container">
+        <h1 class="jumbotron-heading">About this Project</h1>
+        <p class="lead text-muted">This project was super fun! I learned about web scrapping in Java and multithreading, but with that being said,
+        there are a couple of things I regret doing. First, the way I handled exceptions was a bit inconsistent, making it hard for me to sometimes check if a
+            exception was thrown or not in testing. To continue, I also regret not having enough time to write up mockito tests and test my classes in general.
+            I was on a time crunch to begin with -I had a super busy week-, and so when I started having trouble testing, I opted to focus on developing my program
+            and doing system testing instead. If this was a larger program, this will not do, but I think I was able to get away with it here with minimal bugs.
+            The reason I had trouble testing was because I was having trouble with this version of mockito. I'm used to using the latest verison, and that always me to
+            mock a larger variety of classes. In this version 2, it seems to have some trouble mocking some classes (EX. the provided setup test where it had trouble
+            mocking HttpServletRequest. To continue, it also trouble mocking ConcurentHashMap and ThreadPoolExecutor)). Enough about my regrets though, Lets talk about what
+            some additional features that I will consider adding in the future to improve this project-> I noticed that a lot of images don't have alt tags or a description of the image,
+            so perhaps i can use the OpenAI API to generate a description of the image. I have experience working wtih the API, (if you are curious, I would love to tell you about the project I made
+            HooGRADES). I can also add a feature that allows the user to download the images. With these new changes, I'm sure this project will be even more fun to use!
+            Thanks for this project Eulerity! I had a lot of fun!
+
+        </p>
+
+        <div class="input">
+            <form>
+                <input class = " form-control" name="url" type="text" placeholder="PleaseConsiderGivingMeAnInternship:D.com">
+            </form>
+            <button type="button"  class ="btn btn-primary" id = "submit">Scrape!</button>
+        </div>
+
+    </div>
+</section>
+</body>
+</html>
